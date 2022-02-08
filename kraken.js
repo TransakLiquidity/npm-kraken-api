@@ -5,7 +5,7 @@ const qs     = require('qs');
 // Public/Private method names
 const methods = {
 	public  : [ 'Time', 'Assets', 'AssetPairs', 'Ticker', 'Depth', 'Trades', 'Spread', 'OHLC' ],
-	private : [ 'Balance', 'TradeBalance', 'OpenOrders', 'ClosedOrders', 'QueryOrders', 'TradesHistory', 'QueryTrades', 'OpenPositions', 'Ledgers', 'QueryLedgers', 'TradeVolume', 'AddOrder', 'CancelOrder', 'DepositMethods', 'DepositAddresses', 'DepositStatus', 'WithdrawInfo', 'Withdraw', 'WithdrawStatus', 'WithdrawCancel', 'GetWebSocketsToken' ],
+	private : [ 'Balance', 'TradeBalance', 'OpenOrders', 'ClosedOrders', 'QueryOrders', 'TradesHistory', 'QueryTrades', 'OpenPositions', 'Ledgers', 'QueryLedgers', 'TradeVolume', 'AddOrder', 'CancelOrder', 'DepositMethods', 'DepositAddresses', 'DepositStatus', 'WithdrawInfo', 'Withdraw', 'WithdrawStatus', 'WithdrawCancel', 'GetWebSocketsToken', 'AddExport', 'ExportStatus', 'RetrieveExport', 'RemoveExport'],
 };
 
 // Default options
@@ -39,6 +39,12 @@ const rawRequest = async (url, headers, data, timeout) => {
 		body   : qs.stringify(data),
 	});
 
+	
+	// hackjob molec
+        if ( url.endsWith('RetrieveExport')) {
+                options.responseType = 'buffer'
+                return await got(url, options).buffer()
+        }
 	const { body } = await got(url, options);
 	const response = JSON.parse(body);
 
